@@ -9,12 +9,12 @@ services:
   main-gateway:
     build: ./main-gateway
     ports:
-      - ${MAIN_GATEWAY_PORT}:3000
+      - ${MAIN_GATEWAY_PORT}:${MAIN_GATEWAY_PORT}
     volumes:
       - ./main-gateway/src:/usr/src/app/src
     command: yarn start:dev
     environment:
-      - PORT=3000
+      - PORT=${MAIN_GATEWAY_PORT}
       - NATS_SERVERS=nats://nats-server:4222
 
   products-ms:
@@ -50,3 +50,18 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
+
+  payments-ms:
+    build: ./payments-ms
+    ports:
+      - ${PAYMENT_MS_PORT}:${PAYMENT_MS_PORT}
+    volumes:
+      - ./payments-ms/src:/usr/src/app/src
+    command: yarn start:dev
+    environment:
+      - PORT=${PAYMENT_MS_PORT}
+      - NATS_SERVERS=nats://nats-server:4222
+      - STRIPE_SECRET=${STRIPE_SECRET}
+      - STRIPE_SUCCESS_URL=${STRIPE_SUCCESS_URL}
+      - STRIPE_CANCEL_URL=${STRIPE_CANCEL_URL}
+      - STRIPE_ENDPOINT_SECRET=${STRIPE_ENDPOINT_SECRET}
