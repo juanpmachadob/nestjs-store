@@ -1,0 +1,3 @@
+[submodule "main-gateway"]
+	path = main-gateway
+	url = https://github.com/juanpmachadob/nestjs-store-gateway.git
