@@ -15,7 +15,7 @@ services:
     command: yarn start:dev
     environment:
       - PORT=${MAIN_GATEWAY_PORT}
-      - NATS_SERVERS=nats://nats-server:4222
+      - NATS_SERVERS=${NATS_SERVERS}
 
   products-ms:
     build: ./products-ms
@@ -23,8 +23,8 @@ services:
       - ./products-ms/src:/usr/src/app/src
     command: yarn start:dev
     environment:
-      - PORT=3001
-      - NATS_SERVERS=nats://nats-server:4222
+      - PORT=${PRODUCT_MS_PORT}
+      - NATS_SERVERS=${NATS_SERVERS}
       - DATABASE_URL=file:./dev.db
 
   orders-ms:
@@ -35,9 +35,9 @@ services:
       - ./orders-ms/src:/usr/src/app/src
     command: yarn start:dev
     environment:
-      - PORT=3002
+      - PORT=${ORDERS_MS_PORT}
       - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@orders-db:5432/${POSTGRES_DB}?schema=public
-      - NATS_SERVERS=nats://nats-server:4222
+      - NATS_SERVERS=${NATS_SERVERS}
 
   orders-db:
     image: postgres:16.2
@@ -60,8 +60,19 @@ services:
     command: yarn start:dev
     environment:
       - PORT=${PAYMENT_MS_PORT}
-      - NATS_SERVERS=nats://nats-server:4222
+      - NATS_SERVERS=${NATS_SERVERS}
       - STRIPE_SECRET=${STRIPE_SECRET}
       - STRIPE_SUCCESS_URL=${STRIPE_SUCCESS_URL}
       - STRIPE_CANCEL_URL=${STRIPE_CANCEL_URL}
       - STRIPE_ENDPOINT_SECRET=${STRIPE_ENDPOINT_SECRET}
+  
+  auth-ms:
+    build: ./auth-ms
+    volumes:
+      - ./auth-ms/src:/usr/src/app/src
+    command: yarn start:dev
+    environment:
+      - PORT=${AUTH_MS_PORT}
+      - NATS_SERVERS=${NATS_SERVERS}
+      - DATABASE_URL=${AUTH_DATABASE_URL}
+      - JWT_SECRET=${AUTH_JWT_SECRET}
