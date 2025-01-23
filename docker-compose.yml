@@ -23,7 +23,7 @@ services:
       - ./products-ms/src:/usr/src/app/src
     command: yarn start:dev
     environment:
-      - PORT=${PRODUCT_MS_PORT}
+      - PORT=${PRODUCTS_MS_PORT}
       - NATS_SERVERS=${NATS_SERVERS}
       - DATABASE_URL=file:./dev.db
 
