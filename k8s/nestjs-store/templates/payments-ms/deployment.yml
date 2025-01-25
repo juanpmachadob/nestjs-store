@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: payments-ms
+  name: payments-ms
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payments-ms
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: payments-ms
+    spec:
+      containers:
+      - image: us-central1-docker.pkg.dev/store-ms-448722/image-registry/payments-ms
+        name: payments-ms
+        env:
+          - name: PORT
+            value: "3000"
+          - name: NATS_SERVERS
+            value: "nats://nats"
+          - name: STRIPE_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: payments-ms-secrets
+                key: STRIPE_SECRET
+          - name: STRIPE_SUCCESS_URL
+            valueFrom:
+              secretKeyRef:
+                name: payments-ms-secrets
+                key: STRIPE_SUCCESS_URL
+          - name: STRIPE_CANCEL_URL
+            valueFrom:
+              secretKeyRef:
+                name: payments-ms-secrets
+                key: STRIPE_CANCEL_URL
+          - name: STRIPE_ENDPOINT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: payments-ms-secrets
+                key: STRIPE_ENDPOINT_SECRET
+        resources: {}
+status: {}

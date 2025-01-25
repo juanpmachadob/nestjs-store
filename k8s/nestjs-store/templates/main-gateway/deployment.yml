@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: main-gateway
+  name: main-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: main-gateway
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: main-gateway
+    spec:
+      containers:
+      - image: us-central1-docker.pkg.dev/store-ms-448722/image-registry/main-gateway
+        name: main-gateway
+        env:
+        - name: PORT
+          value: "3000"
+        - name: NATS_SERVERS
+          value: "nats://nats"
+        resources: {}
+status: {}
